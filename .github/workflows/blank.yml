@@ -1,24 +1,23 @@
-# Name of workflow to be displyed on Github Console
+# Name of workflow to be displayed on Github Console
 name: Build and Test Go Application
 
 # Triggers the workflow on separate events
 on:
   push:
-    # Trigger the worflow on push event for all branches
+    # Trigger the workflow on push event for all branches
     branches:
       - '**'
   pull_request:
-    # Trigger the worflow on pull request event for main branch
+    # Trigger the workflow on pull request event for main branch
     branches:
       - main
   issue_comment:
-    types: [ created ]
+    types: [created]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # "build" workflow
   build:
-
     name: Build and Test Go Application
     #The type of runner on which job will run
     runs-on: ubuntu-latest
@@ -38,24 +37,23 @@ jobs:
 
   # "notify" workflow for slack notification
   notify:
-
     name: Notify on Slack
     runs-on: ubuntu-latest
     # Only run this workflow when "build" workflow succeeds
-    needs: [ build ]
+    needs: [build]
 
-    # Only run this workflow if it target is main branch on pull_request event
+    # Only run this workflow if its target is main branch on pull_request event
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       - name: Install Slack client
-      - run: npm install @slack/web-api
+        run: npm install @slack/web-api
       - name: Notify PR raiser on Slack
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      - run: |
+        run: |
           const { WebClient } = require('@slack/web-api');
           const web = new WebClient(process.env.SLACK_BOT_TOKEN);
           const pullRequestUrl = process.env.GITHUB_SERVER_URL + '/' + process.env.GITHUB_REPOSITORY + '/pull/' + process.env.GITHUB_REF.split('/').pop();
           const message = `New comment on your pull request <${pullRequestUrl}|${process.env.GITHUB_HEAD_REF}> by ${github.event.comment.user.login}: "${github.event.comment.body}"`;
-          await web.chat.postMessage({ text: message, channel: ${{ process.env.SLACK_CHANNEL_ID}} });
+          await web.chat.postMessage({text: message, channel: process.env.SLACK_CHANNEL_ID });
