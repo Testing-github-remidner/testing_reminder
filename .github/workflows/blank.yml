@@ -53,7 +53,7 @@ jobs:
       - name: Notify PR raiser on Slack
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        run: |
+      - run: |
           const { WebClient } = require('@slack/web-api');
           const web = new WebClient(process.env.SLACK_BOT_TOKEN);
           const pullRequestUrl = process.env.GITHUB_SERVER_URL + '/' + process.env.GITHUB_REPOSITORY + '/pull/' + process.env.GITHUB_REF.split('/').pop();
