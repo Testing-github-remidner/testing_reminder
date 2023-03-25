@@ -46,6 +46,8 @@ jobs:
 
     # Only run this workflow if it target is main branch on pull_request event
     steps:
+      - name: Checkout code
+      - uses: actions/checkout@v2
       - name: Install Slack client
       - run: npm install @slack/web-api
       - name: Notify PR raiser on Slack
