@@ -1,6 +1,10 @@
 name: Send Slack Notification
 
 on:
+  pull_request:
+    # Trigger the worflow on pull request event for main branch
+    branches:
+      - main
   issue_comment:
     types: [created]
 
