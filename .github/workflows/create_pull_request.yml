@@ -24,6 +24,9 @@ jobs:
 
       - name: Send Slack Notification
         env:
+          PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
+          PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+          REQUESTED_REVIEWER: ${{ github.event.requested_reviewer.login }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
           COMMENT_BODY: ${{ github.event.comment.body }}
