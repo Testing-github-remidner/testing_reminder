@@ -1,8 +1,8 @@
 name: Slack Notification for PR Review Request
 
 on:
-  pull_request_review_requested:
-    types: [review_requested]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
 
 jobs:
   send_notification:
