@@ -11,10 +11,21 @@ on:
 jobs:
 
   specific_review_requested:
-    name: Specific Review Requested
-    runs-on: ubuntu-latest
-    steps:
-      - run: ruby pull_request_notification.rb
 
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+      - name: Install Slack Ruby Gem
+        run: gem install slack-ruby-client
+
+      - name: Send Slack Notification
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: ruby pull_request_notification.rb
 
 
