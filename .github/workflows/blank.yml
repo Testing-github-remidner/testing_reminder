@@ -24,6 +24,6 @@ jobs:
       - name: Send Slack Notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: ruby send_slack_notification.rb
