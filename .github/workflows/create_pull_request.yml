@@ -46,7 +46,6 @@ jobs:
 
   notify-on-slack:
     runs-on: ubuntu-latest
-
     outputs:
       ran-once: ${{ steps.set-ran-once.outputs.ran-once }}
     if: steps.set-ran-once.outputs.ran-once != 'true'
