@@ -1,19 +1,28 @@
-name: Notify on Slack for PR Comments
+name: Send Slack Notification
+
 on:
   issue_comment:
     types: [created]
+
 jobs:
-  slack_notification:
+  send_notification:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
-      - name: Send Slack notification
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+
+      - name: Install Slack Ruby Gem
+        run: gem install slack-ruby-client
+
+      - name: Send Slack Notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: <your-slack-channel-id>
-        run: |
-          ruby send_slack_notification.rb ${{ github.event.issue.number }} "${{ github.event.comment.body }}"
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: ruby send_slack_notification.rb
