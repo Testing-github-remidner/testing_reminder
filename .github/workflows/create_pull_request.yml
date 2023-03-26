@@ -8,6 +8,7 @@ on:
     branches:
       -  '**'
   pull_request:
+    types: [opened, reopened, review_requested]
     # Trigger the worflow on pull request event for main branch
     branches:
       - main
@@ -35,6 +36,14 @@ jobs:
         uses: actions/checkout@v2
 
   # "notify" workflow for slack notification
+
+  specific_review_requested:
+    name: Specific Review Requested
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'A review from octo-team was requested'
+
+
   notify:
 
     name: Notify on Slack
