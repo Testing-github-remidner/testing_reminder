@@ -6,7 +6,6 @@ on:
 
 jobs:
   notify_on_pr_comment:
-    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
