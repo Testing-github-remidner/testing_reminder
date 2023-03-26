@@ -1,39 +1,19 @@
-name: Notify on PR Comment
-
+name: Notify on Slack for PR Comments
 on:
   issue_comment:
-    types: [created, deleted]
-
+    types: [created]
 jobs:
-  notify_on_pr_comment:
+  slack_notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-
-      - name: Install Slack gem
-        run: gem install slack-notifier
-
-      - name: Notify on Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_CHANNEL: '#github-pr'
-          SLACK_USERNAME: 'chiity'
+      - uses: actions/checkout@v2
+      - name: Install dependencies
         run: |
-          require 'slack-notifier'
-          client = Slack::Notifier.new(
-            ENV['SLACK_WEBHOOK_URL'],
-            channel: ENV['SLACK_CHANNEL'],
-            username: ENV['SLACK_USERNAME']
-          )
-          pr_url = "#{ENV['GITHUB_SERVER_URL']}/#{ENV['GITHUB_REPOSITORY']}/pull/#{ENV['GITHUB_REF'].split('/').last}"
-          pr_title = "#{ENV['GITHUB_HEAD_REF']}"
-          comment_user = "#{ENV['GITHUB_ACTOR']}"
-          comment_body = "#{ENV['GITHUB_EVENT_PATH']}"
-          message = "New comment on PR <#{pr_url}|#{pr_title}> by #{comment_user}: #{comment_body}"
-          client.ping(message)
+          gem install bundler
+          bundle install
+      - name: Send Slack notification
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: <your-slack-channel-id>
+        run: |
+          ruby send_slack_notification.rb ${{ github.event.issue.number }} "${{ github.event.comment.body }}"
