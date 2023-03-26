@@ -1,5 +1,5 @@
 # Name of workflow to be displyed on Github Console
-name: Build and Test Go Application
+name: Pull request events
 
 # Triggers the workflow on separate events
 on:
@@ -41,7 +41,7 @@ jobs:
     name: Specific Review Requested
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'A review from octo-team was requested'
+      - run: ruby pull_request_notification.rb
 
 
   notify:

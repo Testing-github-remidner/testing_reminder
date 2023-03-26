@@ -1,4 +1,4 @@
-name: Send Slack Notification
+name: Comment added on PR Slack Notification
 
 on:
   pull_request_review_comment:
