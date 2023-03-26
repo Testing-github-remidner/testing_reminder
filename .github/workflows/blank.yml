@@ -3,7 +3,8 @@ name: Notify on PR Comment
 # Trigger the workflow on pull request events with the 'opened' and 'edited' action types
 on:
   pull_request:
-    types: [opened, edited]
+    branches:
+      - main
 
 jobs:
   notify:
