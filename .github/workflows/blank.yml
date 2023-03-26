@@ -1,62 +1,39 @@
 name: Notify on PR Comment
 
-# Trigger the workflow on pull request events with the 'opened' and 'edited' action types
 on:
-  pull_request:
-    branches:
-      - main
+  issue_comment:
+    types: [created]
 
 jobs:
-  notify:
-    name: Notify on PR Comment
+  notify_on_pr_comment:
     runs-on: ubuntu-latest
-
     steps:
-      # Check out the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Ruby and install the Slack Ruby gem
-      - name: Set up Ruby and install dependencies
-        uses: ruby/setup-ruby@v1
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
         with:
-          ruby-version: '3.1.0'
-      - name: Install Slack Ruby gem
+          ruby-version: '3.0'
+
+      - name: Install Slack gem
         run: gem install slack-notifier
 
-      # Get the PR details and comment from the GitHub API
-      - name: Get PR details and comment
-        id: pr
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/:owner/:repo/pulls/:pull_number
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.repository }}
-          pull_number: ${{ github.event.pull_request.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Send a Slack message to the PR author
       - name: Notify on Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_CHANNEL: '#github-pr'
+          SLACK_USERNAME: 'chiity'
         run: |
           require 'slack-notifier'
-
-          # Set up the Slack bot token and channel ID
-          notifier = Slack::Notifier.new(
-            ENV['SLACK_BOT_TOKEN'],
-            channel: ENV['SLACK_CHANNEL_ID']
+          client = Slack::Notifier.new(
+            ENV['SLACK_WEBHOOK_URL'],
+            channel: ENV['SLACK_CHANNEL'],
+            username: ENV['SLACK_USERNAME']
           )
-
-          # Get the PR author's username
-          author = ${{ steps.pr.outputs.user.login }}
-
-          # Get the PR comment body and URL
-          comment = ${{ steps.pr.outputs.body }}
-          comment_url = ${{ steps.pr.outputs.html_url }}
-
-          # Format the message and send it to Slack
-          message = "New comment on your pull request <#{comment_url}|#{author}>: \"#{comment}\""
-          notifier.ping(message)
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: 'your-slack-channel-id'
+          pr_url = "#{ENV['GITHUB_SERVER_URL']}/#{ENV['GITHUB_REPOSITORY']}/pull/#{ENV['GITHUB_REF'].split('/').last}"
+          pr_title = "#{ENV['GITHUB_HEAD_REF']}"
+          comment_user = "#{ENV['GITHUB_ACTOR']}"
+          comment_body = "#{ENV['GITHUB_EVENT_PATH']}"
+          message = "New comment on PR <#{pr_url}|#{pr_title}> by #{comment_user}: #{comment_body}"
+          client.ping(message)
