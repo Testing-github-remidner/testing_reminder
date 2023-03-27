@@ -22,18 +22,6 @@ jobs:
           gem install rest-client
           gem install bundler
           bundle install
-    
-
-      - name: Get reviewer email
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          REVIEWER_LOGIN=$(echo '${{ github.event.review.user.login }}' | tr -d '[:space:]')
-          
-          REVIEWER_EMAIL=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-          "https://api.github.com/users/$REVIEWER_LOGIN" | jq -r '.email')
-          
-          echo "Reviewer email: $REVIEWER_EMAIL"
 
 
       - name: Send Slack Notification
