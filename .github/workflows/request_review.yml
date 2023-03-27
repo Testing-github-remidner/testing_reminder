@@ -19,8 +19,13 @@ jobs:
       - name: Install Slack Ruby Gem
         run: gem install slack-ruby-client
 
-      - name: Install RestClient
-        run: gem install rest-client
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby-full
+          gem install bundler
+          bundle install
+    
 
       - name: Get reviewer email
         env:
