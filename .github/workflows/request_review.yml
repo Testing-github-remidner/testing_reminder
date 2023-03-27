@@ -18,8 +18,11 @@ jobs:
 
       - name: Install Slack Ruby Gem
         run: |
+          gem install slack-ruby-client
           gem install rest-client
+          gem install bundler
           bundle install
+    
 
 
       - name: Send Slack Notification
