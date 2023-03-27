@@ -17,14 +17,10 @@ jobs:
         uses: actions/setup-ruby@v1
 
       - name: Install Slack Ruby Gem
-        run: gem install slack-ruby-client
-
-      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby-full
-          gem install bundler
+          gem install slack-ruby-client
           gem install rest-client
+          gem install bundler
           bundle install
     
 
