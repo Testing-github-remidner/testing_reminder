@@ -22,9 +22,6 @@ jobs:
       - name: Install Slack Ruby Gem
         run: gem install slack-ruby-client
 
-      - name: Install Slack Ruby Gem
-        run: gem install rest-client
-
 
       - name: Send Slack Notification
         env:

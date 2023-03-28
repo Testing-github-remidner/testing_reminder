@@ -13,8 +13,6 @@ message = "A review has been requested for the pull request: <#{ENV['PULL_REQUES
 puts "message #{message}"
 
 puts "Gitjub actor #{ENV['GITHUB_ACTOR']}"
-slack_user = get_slack_user(ENV['GITHUB_ACTOR'], client)
-puts "slack_user #{slack_user}"
 
 channel = ENV['SLACK_CHANNEL_ID']
 
