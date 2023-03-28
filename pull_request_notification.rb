@@ -1,5 +1,4 @@
 require 'slack'
-require 'rest-client'
 require_relative 'slack_helper'
 
 
