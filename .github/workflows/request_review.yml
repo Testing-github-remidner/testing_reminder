@@ -16,19 +16,11 @@ jobs:
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
 
-      - name: Install Slack Ruby Gem
-        run: |
-          gem install slack-ruby-client
-          gem install rest-client
-          gem install bundler
-          bundle install
-    
-
 
       - name: Send Slack Notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
+          SLACK_PR_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
           PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
           PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
           REQUESTED_REVIEWER: ${{ github.event.requested_reviewer.login }}
