@@ -13,7 +13,7 @@ puts "message #{message}"
 
 puts "Gitjub actor #{ENV['GITHUB_ACTOR']}"
 
-channel = ENV['SLACK_CHANNEL_ID']
+channel = ENV['SLACK_PR_CHANNEL_ID']
 
 client.chat_postMessage(channel: channel, text: message)
 
