@@ -13,7 +13,4 @@ puts "pull_request_url #{pull_request_url}"
 puts "message #{message}"
 puts "slack token #{ENV['SLACK_BOT_TOKEN']}"
 
-channel = ENV['SLACK_CHANNEL_ID']
 
-puts "channel id #{channel}"
-client.chat_postMessage(channel: channel, text: message)
