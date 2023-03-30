@@ -1,8 +1,10 @@
-name: Send Slack Notification
+name: Comment added on PR Slack Notification
 
 on:
+  pull_request_review_comment:
+    types: [created, deleted]
   issue_comment:
-    types: [created]
+    types: [ created, deleted ]
 
 jobs:
   send_notification:
@@ -14,15 +16,12 @@ jobs:
 
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-
       - name: Install Slack Ruby Gem
         run: gem install slack-ruby-client
 
       - name: Send Slack Notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_PR_CHANNEL_ID }}
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: ruby send_slack_notification.rb
