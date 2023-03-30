@@ -19,6 +19,7 @@ jobs:
       - name: Install Slack Ruby Gem
         run: gem install slack-ruby-client
 
+
       - name: Send Slack Notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
